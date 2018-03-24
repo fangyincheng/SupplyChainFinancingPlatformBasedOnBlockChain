@@ -2,11 +2,11 @@
 
 set -e
 
-#设置路径到脚本目录
+echo "===> 设置路径到脚本目录"
 basepath=$(cd `dirname $0`; pwd)
 cd $basepath
 
-#设置docker-compose.yaml使用的环境变量
+echo "===> 设置docker-compose.yaml使用的环境变量"
 if [ -z $1 ]; then
     export IMAGE_TAG=latest
 else
@@ -14,5 +14,5 @@ else
 fi
 export COMPOSE_PROJECT_NAME=supply_chain
 
-#启动网络
+echo "===> 启动网络(IMAGE_TAG=${IMAGE_TAG}, COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME})"
 docker-compose -f docker-compose.yaml up -d
