@@ -1,0 +1,77 @@
+#
+#
+Profiles:
+
+    OrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *orderer
+        Consortiums:
+            SupplyChainConsortium:
+                Organizations:
+                    - *bank
+                    - *core
+                    - *supplier
+
+Organizations:
+
+    - &orderer
+        Name: ordererMSP
+        ID: ordererMSP
+        MSPDir: ./../../crypto-config/ordererOrganizations/orderer.com/msp
+
+    - &bank
+        Name: bankMSP
+        ID: bankMSP
+        MSPDir: ./../../crypto-config/peerOrganizations/bank.com/msp
+        AnchorPeers:
+            - Host: peer0.bank.com
+              Port: 7051
+
+    - &core
+        Name: coreMSP
+        ID: coreMSP
+        MSPDir: ./../../crypto-config/peerOrganizations/core.com/msp
+        AnchorPeers:
+            - Host: peer0.core.com
+              Port: 7051
+
+    - &supplier
+        Name: supplierMSP
+        ID: supplierMSP
+        MSPDir: ./../../crypto-config/peerOrganizations/supplier.com/msp
+        AnchorPeers:
+            - Host: peer0.supplier.com
+              Port: 7051
+
+
+Orderer: &OrdererDefaults
+
+    # Orderer Type: The orderer implementation to start
+    OrdererType: solo
+
+    Addresses:
+        - orderer0.orderer.com:7050
+
+    # Batch Timeout: The amount of time to wait before creating a batch
+    BatchTimeout: 2s
+
+    # Batch Size: Controls the number of messages batched into a block
+    BatchSize:
+
+        # Max Message Count: The maximum number of messages to permit in a batch
+        MaxMessageCount: 3 
+
+        # Absolute Max Bytes: The absolute maximum number of bytes allowed for
+        # the serialized messages in a batch.
+        AbsoluteMaxBytes: 98 MB
+
+        # Preferred Max Bytes: The preferred maximum number of bytes allowed for
+        # the serialized messages in a batch. A message larger than the preferred
+        # max bytes will result in a batch larger than preferred max bytes.
+        PreferredMaxBytes: 512 KB
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the orderer side of the network
+    Organizations:
